@@ -27,4 +27,9 @@ app
     res.send("This is a DELETE request at /api/user/:id");
   });
 
+app.use((err, req, res, next) => {
+  console.log(err.stack);
+  res.status(500).send("Something went wrong, please try again later");
+});
+
 app.listen(PORT, () => console.log(`Server listening on port: ${PORT}`));
