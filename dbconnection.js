@@ -2,19 +2,35 @@ import { MongoClient } from "mongodb";
 
 const uri = "mongodb://localhost:27017";
 
-const client = new MongoClient(uri);
-
-async function run() {
+export async function getUsers() {
+  const client = new MongoClient(uri);
   try {
-    const database = await client.db("gci");
+    const database = client.db("gci");
     const table = database.collection("users");
-    const record = await table.findOne({
-      firstName: "Jason",
-    });
-    console.log(record);
+    const records = await table
+      .find({}, { projection: { _id: 0 }, sort: { firstName: 1 } })
+      .toArray();
+    return records;
   } finally {
     client.close();
   }
 }
 
-run();
+export async function addUser(user) {
+  const client = new MongoClient(uri);
+  try {
+    const database = client.db("gci");
+    const table = database.collection("users");
+    if (user) {
+      const record = await table.insertOne({
+        firstName: user.firstName || "",
+        lastName: user.lastName || "",
+        email: user.email || "",
+      });
+      console.log(record);
+      return record.insertedId;
+    }
+  } finally {
+    client.close();
+  }
+}
