@@ -1,6 +1,6 @@
 import express from "express";
 import data from "./data/mock.json" assert { type: "json" };
-import { getUsers, addUser } from "./dbconnection.js";
+import { getUsers, addUser, removeUser } from "./dbconnection.js";
 
 const app = express();
 
@@ -21,10 +21,14 @@ app
   })
   .put((req, res) => {
     res.send("This is a PUT request at /api/user/:id");
-  })
-  .delete((req, res) => {
-    res.send("This is a DELETE request at /api/user/:id");
   });
+app.delete("/api/removeuser/:email", async (req, res) => {
+  const email = req.params.email;
+  const result = await removeUser(email);
+  result === 1
+    ? res.send("User successfully removed")
+    : res.send("Sorry, something went wrong, try again later");
+});
 
 app.post("/api", async (req, res) => {
   //res.send("This is a POST request at /api");

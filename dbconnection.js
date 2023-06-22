@@ -34,3 +34,21 @@ export async function addUser(user) {
     client.close();
   }
 }
+
+export async function removeUser(email) {
+  const client = new MongoClient(uri);
+  try {
+    const database = client.db("gci");
+    const table = database.collection("users");
+    const user = await table.findOne({ email });
+    if (user) {
+      const record = await table.deleteOne({
+        email,
+      });
+      console.log(record);
+      return record.deletedCount;
+    }
+  } finally {
+    client.close();
+  }
+}
