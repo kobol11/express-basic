@@ -1,6 +1,6 @@
 import { MongoClient } from "mongodb";
 
-const uri = "mongodb://localhost:27017";
+const uri = process.env.dbHost || "mongodb://localhost:27017";
 
 export async function getUsers() {
   const client = new MongoClient(uri);
