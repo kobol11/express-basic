@@ -8,6 +8,6 @@ COPY . .
 
 RUN npm install 
 
-ENV dbHost="mongodb://127.0.0.1"
+ENV dbHost="mongodb://host.docker.internal:27017"
 
-ENTRYPOINT [ "node", "index.js" ]
+ENTRYPOINT [ "npm", "start" ]
